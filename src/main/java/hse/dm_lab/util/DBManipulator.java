@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Properties;
 
 public class DBManipulator {
-    private final String URl = "JDBC:mysql://localhost:3306/data_management?serverTimezone=UTC&characterEncoding=utf8&";
-    private final String id = "root";
-    private final String password = "alfresco";
+    private final String URl = "jdbc:postgresql://localhost:5347/lab5";
+    private final String id = "postgres";
+    private final String password = "603041";
     private Connection connection;
 
     public DBManipulator() {
         try {
-            String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+            String JDBC_DRIVER = "org.postgresql.Driver";
             Class.forName(JDBC_DRIVER);
             Properties properties = new Properties();
             properties.setProperty("user", id);
@@ -32,13 +32,10 @@ public class DBManipulator {
         try {
             deleteDB();
             Statement statement = connection.createStatement();
-            String createTableCmd = "CREATE TABLE data_management.claims (" +
-                    "    id INT(64) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                    "    fio VARCHAR(128)," +
-                    "    sex BOOL DEFAULT FALSE," +
-                    "    claim_count INT(128)," +
-                    "    role VARCHAR(32)" +
-                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            String createTableCmd = "create table Drags (id int primary key check (id>=001)," +
+                    "              name varchar(100) not null unique," +
+                    "              price int check (price>=001)," +
+                    "              recipe varchar(100))";
 
             connection = DriverManager.getConnection(URl,id,password);
             statement.executeUpdate(createTableCmd);

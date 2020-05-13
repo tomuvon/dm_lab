@@ -20,7 +20,7 @@ public class MainApplication extends Application {
         String fxmlFile = "/fxml/Menu.fxml";
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
-        stage.setTitle("Palashinovich File Database");
+        stage.setTitle("Vatletsova File Database");
         stage.setScene(new Scene(root));
         stage.show();
     }
