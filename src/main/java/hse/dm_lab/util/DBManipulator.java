@@ -32,7 +32,7 @@ public class DBManipulator {
     public void createDB() {
         try {
             deleteDB();
-            CallableStatement proc = connection.prepareCall("{ ? = call createDragsDB()() }");
+            CallableStatement proc = connection.prepareCall("{ ? = call createDragsDB() }");
             proc.execute();
             proc.close();
 
@@ -169,92 +169,80 @@ public class DBManipulator {
         try {
             Statement statement = connection.createStatement();
 
-            String createTableProcedure = "create or replace function createDragsDB()\n" +
-                    "returns int as\n" +
-                    "$$\n" +
-                    "declare\n" +
-                    "begin\n" +
-                    "\n" +
-                    "create table Drags (id int primary key check (id>=001),\n" +
-                    "\t              name varchar(100) not null unique,\n" +
-                    "\t              price int check (price>=001), \n" +
-                    "\t              recipe boolean);\n" +
-                    "return 1;\t\t\n" +
-                    "end;\n" +
+            String createTableProcedure = "create or replace function createDragsDB() " +
+                    "returns int as " +
+                    "$$ " +
+                    "declare " +
+                    "begin " +
+                    "create table Drags (id int primary key check (id>=001), " +
+                    "              name varchar(100) not null unique, " +
+                    "              price int check (price>=001),  " +
+                    "              recipe boolean); " +
+                    "return 1; " +
+                    "end; " +
                     "$$language plpgsql";
 
-            String dropTableProcedure = "create or replace function deleteDragsDB()\n" +
-                    "returns int as\n" +
-                    "$$\n" +
-                    "declare\n" +
-                    "begin\n" +
-                    "\n" +
-                    "drop table Drags;\n" +
-                    "return 1;\t\t\n" +
-                    "end;\n" +
-                    "$$language plpgsql\n";
+            String dropTableProcedure = "create or replace function deleteDragsDB() " +
+                    "returns int as " +
+                    "$$ " +
+                    "declare " +
+                    "begin " +
+                    "drop table Drags; " +
+                    "return 1; " +
+                    "end; " +
+                    "$$language plpgsql ";
 
-            String cleanTableProcedure = "create or replace function CleanDragsDB()\n" +
-                    "returns int as\n" +
-                    "$$\n" +
-                    "begin\n" +
-                    "\n" +
-                    "delete from Drags where Drags.id is not null;\n" +
-                    "\n" +
-                    "return 1;\t\t\n" +
-                    "end;\n" +
-                    "$$language plpgsql\n";
+            String cleanTableProcedure = "create or replace function CleanDragsDB() " +
+                    "returns int as " +
+                    "$$ " +
+                    "begin " +
+                    "delete from Drags where Drags.id is not null; " +
+                    "return 1; " +
+                    "end; " +
+                    "$$language plpgsql ";
 
-            String showAllProcedure = "create function SelectDragsDB()\n" +
-                    "returns table(id int, name text, price int, recipe text)\n" +
-                    "as\n" +
-                    "$$\n" +
-                    "declare\n" +
-                    "rec record;\n" +
-                    "begin \n" +
-                    "perform Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null;\n" +
-                    "for rec in select Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null;\n" +
-                    "group by Drags.id;\n" +
-                    "end; \n" +
-                    "$$ language plpgsql;";
+            String showAllProcedure = "create or replace function SelectDragsDB() " +
+                    "returns table(id int, name text, price int, recipe boolean) " +
+                    "as " +
+                    "$$ " +
+                    "declare " +
+                    "rec record; " +
+                    "begin " +
+                    " perform Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null; " +
+                    " select Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null into rec; " +
+                    "end; " +
+                    "$$ language plpgsql";
 
-            String insertNewItemProcedure = "create or replace function AddNewDrag(name varchar(100), price int, recipe boolean)\n" +
-                    "returns int as\n" +
-                    "$$\n" +
-                    "declare\n" +
-                    "n alias for $1;\n" +
-                    "pr alias for $2;\n" +
-                    "r alias for $3;\n" +
-                    "d_id Drags.id%type;\n" +
-                    "begin\n" +
-                    "\n" +
-                    "select max(id) into d_id from Drags;\n" +
-                    "if(d_id is null) then\n" +
-                    "d_id = 0;\n" +
-                    "end if;\n" +
-                    "\n" +
-                    "insert into Drags values (d_id + 1, n, pr, r);\n" +
-                    "\n" +
-                    "return 1;\t\t\n" +
-                    "end;\n" +
+            String insertNewItemProcedure = "create or replace function AddNewDrag(name varchar(100), price int, recipe boolean) " +
+                    "returns int as " +
+                    "$$ " +
+                    "declare " +
+                    "n alias for $1; " +
+                    "pr alias for $2; " +
+                    "r alias for $3; " +
+                    "d_id integer; " +
+                    "begin " +
+                    "   select max(id) into d_id from Drags; " +
+                    "   if(d_id is null) then " +
+                    "       d_id = 0; " +
+                    "   end if; " +
+                    "   insert into Drags values (d_id + 1, n, pr, r); " +
+                    "return 1; " +
+                    "end; " +
                     "$$language plpgsql";
 
-            String deleteItemProcedure = "create or replace function DeleteDragByName(name varchar(100))\n" +
-                    "returns int as\n" +
-                    "$$\n" +
-                    "declare\n" +
-                    "n alias for $1;\n" +
-                    "\n" +
-                    "begin\n" +
-                    "\n" +
-                    "delete from Drags where Drags.name = n;\n" +
-                    "\n" +
-                    "if not found then\n" +
-                    "raise exception 'Лекарства нет в базе';\n" +
-                    "end if;\n" +
-                    "\n" +
-                    "return 1;\t\t\n" +
-                    "end;\n" +
+            String deleteItemProcedure = "create or replace function DeleteDragByName(name varchar(100)) " +
+                    "returns int as " +
+                    "$$ " +
+                    "declare " +
+                    "n alias for $1; " +
+                    "begin " +
+                    "delete from Drags where Drags.name = n; " +
+                    "if not found then " +
+                    "raise exception 'Лекарства нет в базе'; " +
+                    "end if; " +
+                    "return 1; " +
+                    "end; " +
                     "$$language plpgsql";
 
             statement.executeUpdate(createTableProcedure);
