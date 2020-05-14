@@ -4,7 +4,6 @@ import hse.dm_lab.model.Item;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -103,16 +102,10 @@ public class DBManipulator {
 
     public List<Item> showAll() {
         try {
-            List<Item> result = new ArrayList<>();
             CallableStatement proc = connection.prepareCall("{ ? = call SelectDragsDB() }");
             proc.execute();
             ResultSet results = proc.getResultSet();
-
-            while (results.next()) {
-                Item item = ItemConverter.entityFromResultSet(results);
-                result.add(item);
-            }
-            return result;
+            return ItemConverter.entityFromResultSet(results);
         } catch (SQLException e) {
             System.out.println("Ошибка во время выполнения select'a");
             e.printStackTrace();
@@ -202,15 +195,13 @@ public class DBManipulator {
                     "$$language plpgsql ";
 
             String showAllProcedure = "create or replace function SelectDragsDB() " +
-                    "returns table(id int, name text, price int, recipe boolean) " +
-                    "as " +
+                    "RETURNS SETOF Drags AS " +
                     "$$ " +
-                    "declare " +
-                    "rec record; " +
-                    "begin " +
-                    " perform Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null; " +
-                    " select Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null into rec; " +
-                    "end; " +
+                    "BEGIN " +
+                    "    return query " +
+                    "        SELECT * " +
+                    "        FROM Drags; " +
+                    "END; " +
                     "$$ language plpgsql";
 
             String insertNewItemProcedure = "create or replace function AddNewDrag(name varchar(100), price int, recipe boolean) " +

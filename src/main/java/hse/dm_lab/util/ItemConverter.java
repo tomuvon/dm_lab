@@ -4,21 +4,26 @@ import hse.dm_lab.model.Item;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemConverter {
 
-    static Item entityFromResultSet(ResultSet resultSet) {
+    static List<Item> entityFromResultSet(ResultSet resultSet) {
+        List<Item> res = new ArrayList<>();
         try {
-            Item item = new Item();
-            item.setId(resultSet.getInt("id"));
-            item.setName(resultSet.getString("name"));
-            item.setPrice(resultSet.getInt("price"));
-            item.setRecipe(resultSet.getBoolean("recipe") ? "yes" : "no");
-            return item;
+            while (resultSet.next()) {
+                Item item = new Item();
+                String[] object = resultSet.getString(1).substring(1, resultSet.getString(1).length() - 1).split(",");
+                item.setId(Integer.parseInt(object[0]));
+                item.setName(object[1].replace("\"", ""));
+                item.setPrice(Integer.parseInt(object[2]));
+                item.setRecipe(object[3].equals("t") ? "yes" : "no");
+                res.add(item);
+            }
         } catch (SQLException e) {
-            System.out.println("Ошибка во время извлечения сущности из бд");
             e.printStackTrace();
         }
-        return null;
+        return res;
     }
 }
