@@ -124,8 +124,8 @@ public class DBManipulator {
         try {
             CallableStatement statement = connection.prepareCall("{ call AddNewDrag(?, ?, ?) }");
             statement.setString(1, object.getName());
-            statement.setBoolean(2, object.getRecipe().equals("yes"));
-            statement.setInt(3, object.getPrice());
+            statement.setInt(2, object.getPrice());
+            statement.setBoolean(3, object.getRecipe().equals("yes"));
             statement.execute();
             statement.close();
         } catch (Exception e) {
@@ -226,8 +226,8 @@ public class DBManipulator {
                     "   if(d_id is null) then " +
                     "       d_id = 0; " +
                     "   end if; " +
-                    "   insert into Drags values (d_id + 1, n, pr, r); " +
-                    "return 1; " +
+                    "   insert into Drags (id, name, price, recipe) values (d_id + 1, n, pr, r); " +
+                    "   return 1; " +
                     "end; " +
                     "$$language plpgsql";
 

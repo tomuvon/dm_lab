@@ -36,11 +36,11 @@ public class InsertController {
             alert.setContentText("Не заполнено поле ФИО");
             alert.showAndWait();
         } else {
-            if (nameTextField.getText().length() < 10) {
+            if (nameTextField.getText().length() < 2) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Ошибка");
                 alert.setHeaderText("Ошибка");
-                alert.setContentText("Слишком короткое ФИО");
+                alert.setContentText("Слишком короткое название");
                 alert.showAndWait();
             }
         }
