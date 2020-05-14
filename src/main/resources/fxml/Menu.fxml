@@ -4,11 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="399.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="hse.dm_lab.controller.MenuController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hse.dm_lab.controller.MenuController">
   <children>
     <GridPane prefHeight="400.0" prefWidth="399.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <Label alignment="CENTER" contentDisplay="CENTER" text="Добро пожаловать" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+        <Label alignment="CENTER" contentDisplay="CENTER" text="hello, stranger" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
           <font>
             <Font size="16.0" fx:id="x1" />
           </font>
@@ -16,23 +16,23 @@
             <Insets top="-15.0" />
           </GridPane.margin>
         </Label>
-        <Label font="$x1" text="Выберите необходимую опцию" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+        <Label font="$x1" text="choose your path" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
           <GridPane.margin>
             <Insets top="40.0" />
           </GridPane.margin>
         </Label>
-        <Button fx:id="deleteDBButton" mnemonicParsing="false" onAction="#deleteDB" prefHeight="53.0" prefWidth="160.0" text="Удалить базу данных" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-        <Button fx:id="openDBButton" mnemonicParsing="false" onAction="#selectAll" prefHeight="46.0" prefWidth="160.0" text="Открыть базу данных" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-        <Button fx:id="newDBButton" mnemonicParsing="false" onAction="#initDB" prefHeight="46.0" prefWidth="181.0" text="Создать новую базу данных" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+        <Button fx:id="deleteDBButton" mnemonicParsing="false" onAction="#deleteDB" prefHeight="53.0" prefWidth="160.0" text="delete DB" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+        <Button fx:id="openDBButton" mnemonicParsing="false" onAction="#selectAll" prefHeight="46.0" prefWidth="160.0" text="open DB" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+        <Button fx:id="newDBButton" mnemonicParsing="false" onAction="#initDB" prefHeight="46.0" prefWidth="181.0" text="create new DB" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       </children>
       <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       </columnConstraints>
       <rowConstraints>
         <RowConstraints maxHeight="133.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="106.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="133.0" minHeight="10.0" prefHeight="112.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="133.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
   </children>

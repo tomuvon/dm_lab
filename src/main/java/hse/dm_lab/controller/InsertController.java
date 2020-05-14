@@ -11,19 +11,16 @@ public class InsertController {
     private ToggleGroup toggleGroup = new ToggleGroup();
 
     @FXML
-    private TextField fioTextField;
+    private TextField nameTextField;
 
     @FXML
-    private TextField roleTextField;
+    private TextField priceTextField;
 
     @FXML
-    private TextField claimCountTextField;
+    private RadioButton yesButton;
 
     @FXML
-    private RadioButton maleRadioButton;
-
-    @FXML
-    private RadioButton femaleRadioButton;
+    private RadioButton noButton;
 
     @FXML
     private Button submitButton;
@@ -31,15 +28,15 @@ public class InsertController {
     @FXML
     void submitInsert(ActionEvent event) {
         Item item = new Item();
-        //fio field
-        if (fioTextField.getText() == null || fioTextField.getText().trim().isEmpty()) {
+
+        if (nameTextField.getText() == null || nameTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
             alert.setHeaderText("Ошибка");
             alert.setContentText("Не заполнено поле ФИО");
             alert.showAndWait();
         } else {
-            if (fioTextField.getText().length() < 10) {
+            if (nameTextField.getText().length() < 10) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Ошибка");
                 alert.setHeaderText("Ошибка");
@@ -47,55 +44,20 @@ public class InsertController {
                 alert.showAndWait();
             }
         }
-        item.setFio(fioTextField.getText());
+        item.setName(nameTextField.getText());
 
-        //role field
-        if (roleTextField.getText() == null || roleTextField.getText().trim().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Ошибка");
-            alert.setContentText("Не заполнена роль. Будет присвоена роль Пользователь");
-            alert.showAndWait();
-            item.setRole("Пользователь");
-        } else {
-            switch (roleTextField.getText()) {
-                case "Админ":
-                case "Администратор":
-                    item.setRole("Администратор");
-                    break;
-                case "Аналитик":
-                    item.setRole("Аналитик");
-                    break;
-                case "Юзер":
-                case "Пользователь":
-                    item.setRole("Пользователь");
-                    break;
-                case "Дев":
-                case "Девелопер":
-                case "Разработчик":
-                    item.setRole("Разработчик");
-                    break;
-                default:
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Ошибка");
-                    alert.setHeaderText("Ошибка");
-                    alert.setContentText("Нет такой роли");
-                    alert.showAndWait();
-            }
-        }
 
-        //claimCount field
-        if (claimCountTextField.getText() == null || claimCountTextField.getText().trim().isEmpty()) {
+        if (priceTextField.getText() == null || priceTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Внимание");
             alert.setHeaderText("Внимание");
             alert.setContentText("Вы не указали количество заявок, будет присвоен 0");
             alert.showAndWait();
-            item.setClaimCount(0);
+            item.setPrice(0);
         } else {
             try {
-                int claims = Integer.parseInt(claimCountTextField.getText());
-                item.setClaimCount(claims);
+                int price = Integer.parseInt(priceTextField.getText());
+                item.setPrice(price);
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Ошибка");
@@ -105,10 +67,9 @@ public class InsertController {
             }
         }
 
-        //sex field
-        String sex = ((ToggleButton)toggleGroup.getSelectedToggle()).getText();
-        if (sex != null) {
-            item.setSex(sex);
+        String recipe = ((ToggleButton)toggleGroup.getSelectedToggle()).getText();
+        if (recipe != null) {
+            item.setRecipe(recipe);
         }
 
         MainApplication.manipulator.saveToDB(item);
@@ -117,8 +78,8 @@ public class InsertController {
 
     @FXML
     void initialize() {
-        maleRadioButton.setToggleGroup(toggleGroup);
-        maleRadioButton.setSelected(true);
-        femaleRadioButton.setToggleGroup(toggleGroup);
+        yesButton.setToggleGroup(toggleGroup);
+        yesButton.setSelected(true);
+        noButton.setToggleGroup(toggleGroup);
     }
 }

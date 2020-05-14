@@ -3,29 +3,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="496.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hse.dm_lab.controller.MainViewController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="496.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hse.dm_lab.controller.MainViewController">
   <children>
     <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <TableView fx:id="mainTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-          <columns>
-            <TableColumn fx:id="idColumn" editable="false" prefWidth="40.0" text="№" />
-            <TableColumn fx:id="fioColumn" editable="false" onEditCommit="#editFioColumn" prefWidth="350.0" text="ФИО" />
-            <TableColumn fx:id="sexColumn" editable="false" onEditCommit="#editSexColumn" prefWidth="115.0" text="Пол" />
-            <TableColumn fx:id="claimColumn" editable="false" onEditCommit="#editClaimCountColumn" prefWidth="150.0" text="Количество заявок" />
-            <TableColumn fx:id="roleColumn" editable="false" onEditCommit="#editRoleColumn" prefWidth="75.0" text="Роль" />
-          </columns>
-        </TableView>
-        <GridPane GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <GridPane GridPane.rowIndex="1">
           <children>
-            <Button id="insert" fx:id="insertButton" mnemonicParsing="false" onAction="#insert" text="Добавить запись" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+            <Button id="insert" fx:id="insertButton" mnemonicParsing="false" onAction="#insert" text="Add new drag" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
               <font>
                 <Font size="14.0" fx:id="x1" />
               </font>
             </Button>
-            <Button fx:id="deleteButton" font="$x1" mnemonicParsing="false" onAction="#delete" text="Удалить запись" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
-            <Button fx:id="searchButon" font="$x1" mnemonicParsing="false" onAction="#search" text="Поиск" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
-                  <Button fx:id="clearTableButton" mnemonicParsing="false" onAction="#clearTable" text="Очистить таблицу" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button fx:id="deleteButton" font="$x1" mnemonicParsing="false" onAction="#delete" text="Delete drag by name" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button fx:id="searchButton" font="$x1" mnemonicParsing="false" onAction="#search" text="Find drag" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Button fx:id="clearTableButton" mnemonicParsing="false" onAction="#clearTable" text="Clean DB" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -46,9 +37,17 @@
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       </columnConstraints>
       <rowConstraints>
-        <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="104.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="409.0" minHeight="10.0" prefHeight="392.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="385.99998474121094" minHeight="10.0" prefHeight="385.99998474121094" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="409.0" minHeight="10.0" prefHeight="110.00001525878906" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
+      <TableView fx:id="tableColumn" prefHeight="385.0" prefWidth="743.0">
+        <columns>
+          <TableColumn fx:id="idColumn" prefWidth="90.66668450832367" text="id" />
+          <TableColumn fx:id="nameColumn" prefWidth="278.6666793823242" text="name" />
+            <TableColumn fx:id="priceColumn" prefWidth="176.66665649414062" text="price" />
+            <TableColumn fx:id="recipeColumn" prefWidth="196.66668701171875" text="recipe" />
+        </columns>
+      </TableView>
   </children>
 </AnchorPane>

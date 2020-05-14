@@ -55,7 +55,7 @@ public class MenuController {
         Pane pane = FXMLLoader.load(MenuController.class.getResource("/fxml/MainView.fxml"));
         Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.setTitle("Palashinovich File Database");
+        stage.setTitle("Vatletsova File Database");
         openDBButton.getScene().getWindow().hide();
         stage.show();
     }

@@ -4,19 +4,17 @@ import java.util.Objects;
 
 public class Item {
     private Integer id;
-    private String fio;
-    private String sex;
-    private Integer claimCount;
-    private String role;
+    private String name;
+    private Integer price;
+    private String recipe;
 
     public Item() {}
 
     public Item(Integer id, String fio, String sex, Integer claimCount, String role) {
         this.id = id;
-        this.fio = fio;
-        this.sex = sex;
-        this.claimCount = claimCount;
-        this.role = role;
+        this.name = name;
+        this.price = price;
+        this.recipe = recipe;
     }
 
     public Item(Integer id) {
@@ -31,36 +29,28 @@ public class Item {
         this.id = id;
     }
 
-    public String getFio() {
-        return fio;
+    public String getName() {
+        return name;
     }
 
-    public void setFio(String fio) {
-        this.fio = fio;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getClaimCount() {
-        return claimCount;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setClaimCount(Integer claimCount) {
-        this.claimCount = claimCount;
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
-    public String getSex() {
-        return sex;
+    public String getRecipe() {
+        return recipe;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setRecipe(String recipe) {
+        this.recipe = recipe;
     }
 
     @Override
@@ -70,14 +60,14 @@ public class Item {
         Item item = (Item) o;
         if (this.id.equals(item.getId())) return true;
         return id.equals(item.id) &&
-                Objects.equals(fio, item.fio) &&
-                Objects.equals(sex, item.sex) &&
-                Objects.equals(claimCount, item.claimCount) &&
-                Objects.equals(role, item.role);
+                Objects.equals(name, item.name) &&
+                Objects.equals(price, item.price) &&
+                Objects.equals(recipe, item.recipe);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fio, sex, claimCount, role);
+        return Objects.hash(id, name, price, recipe);
     }
+
 }

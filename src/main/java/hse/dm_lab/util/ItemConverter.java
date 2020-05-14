@@ -11,10 +11,9 @@ public class ItemConverter {
         try {
             Item item = new Item();
             item.setId(resultSet.getInt("id"));
-            item.setFio(resultSet.getString("fio"));
-            item.setSex(resultSet.getBoolean("sex") ? "Мужской" : "Женский");
-            item.setClaimCount(resultSet.getInt("claim_count"));
-            item.setRole(resultSet.getString("role"));
+            item.setName(resultSet.getString("name"));
+            item.setPrice(resultSet.getInt("price"));
+            item.setRecipe(resultSet.getBoolean("recipe") ? "yes" : "no");
             return item;
         } catch (SQLException e) {
             System.out.println("Ошибка во время извлечения сущности из бд");

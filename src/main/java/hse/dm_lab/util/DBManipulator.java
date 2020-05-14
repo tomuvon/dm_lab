@@ -22,6 +22,7 @@ public class DBManipulator {
             properties.setProperty("user", id);
             properties.setProperty("password", password);
             connection = DriverManager.getConnection(URl,properties);
+            initProcedures();
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Exception while connecting with MySQL");
             e.printStackTrace();
@@ -31,14 +32,11 @@ public class DBManipulator {
     public void createDB() {
         try {
             deleteDB();
-            Statement statement = connection.createStatement();
-            String createTableCmd = "create table Drags (id int primary key check (id>=001)," +
-                    "              name varchar(100) not null unique," +
-                    "              price int check (price>=001)," +
-                    "              recipe varchar(100))";
+            CallableStatement proc = connection.prepareCall("{ ? = call createDragsDB()() }");
+            proc.execute();
+            proc.close();
 
             connection = DriverManager.getConnection(URl,id,password);
-            statement.executeUpdate(createTableCmd);
             System.out.println("Table created");
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -60,9 +58,9 @@ public class DBManipulator {
     //удаление базы данных
     public void deleteDB() {
         try {
-            Statement statement = connection.createStatement();
-            String deleteCmd = "DROP TABLE IF EXISTS data_management.claims";
-            statement.executeUpdate(deleteCmd);
+            CallableStatement proc = connection.prepareCall("{ ? = call deleteDragsDB() }");
+            proc.execute();
+            proc.close();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Успех");
@@ -83,9 +81,9 @@ public class DBManipulator {
     //очистка базы данных
     public void clearDB() {
         try {
-            Statement statement = connection.createStatement();
-            String query = "TRUNCATE TABLE data_management.claims";
-            statement.executeUpdate(query);
+            CallableStatement proc = connection.prepareCall("{ ? = call CleanDragsDB() }");
+            proc.execute();
+            proc.close();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Успех");
@@ -106,11 +104,12 @@ public class DBManipulator {
     public List<Item> showAll() {
         try {
             List<Item> result = new ArrayList<>();
-            String query = "SELECT * FROM data_management.claims";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-            while (rs.next()) {
-                Item item = ItemConverter.entityFromResultSet(rs);
+            CallableStatement proc = connection.prepareCall("{ ? = call SelectDragsDB() }");
+            proc.execute();
+            ResultSet results = proc.getResultSet();
+
+            while (results.next()) {
+                Item item = ItemConverter.entityFromResultSet(results);
                 result.add(item);
             }
             return result;
@@ -123,34 +122,23 @@ public class DBManipulator {
 
     public void saveToDB(Item object) {
         try {
-            String query = "INSERT INTO data_management.claims (fio, sex, claim_count, role) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, object.getFio());
-            statement.setBoolean(2, object.getSex().equals("Мужской"));
-            statement.setInt(3, object.getClaimCount());
-            statement.setString(4, object.getRole());
-
+            CallableStatement statement = connection.prepareCall("{ call AddNewDrag(?, ?, ?) }");
+            statement.setString(1, object.getName());
+            statement.setBoolean(2, object.getRecipe().equals("yes"));
+            statement.setInt(3, object.getPrice());
             statement.execute();
+            statement.close();
         } catch (Exception e) {
             writingException(e);
         }
     }
 
-    private void saveToDB(List<Item> items) {
+    public void deleteItemProcedure(Integer itemId) {
         try {
-            for (Item object : items) {
-                saveToDB(object);
-            }
-        } catch (Exception e) {
-            writingException(e);
-        }
-    }
-
-    public void deleteItem(Integer itemId) {
-        try {
-            Statement statement = connection.createStatement();
-            String query = "DELETE FROM data_management.claims WHERE id = " + itemId;
-            statement.executeUpdate(query);
+            CallableStatement statement = connection.prepareCall("{ call DeleteDragByName(?) }");
+            statement.setInt(1, itemId);
+            statement.execute();
+            statement.close();
             System.out.println("Запись была успешно удалена");
         } catch (SQLException e) {
             System.out.println("Could not clear database");
@@ -164,45 +152,7 @@ public class DBManipulator {
     }
 
     public void selectItems(Item filterItem) {
-        List<Item> items = showAll();
-        if (filterItem.getId() != null) {
-            for (Item currentItem : new ArrayList<>(items)) {
-                if (!currentItem.getId().equals(filterItem.getId())) {
-                    items.remove(currentItem);
-                }
-            }
-            saveToDB(items);
-            return;
-        }
-        if (filterItem.getFio() != null) {
-            for (Item currentItem : new ArrayList<>(items)) {
-                if (!currentItem.getFio().equals(filterItem.getFio())) {
-                    items.remove(currentItem);
-                }
-            }
-        }
-        if (filterItem.getClaimCount() != null) {
-            for (Item currentItem : new ArrayList<>(items)) {
-                if (!currentItem.getClaimCount().equals(filterItem.getClaimCount())) {
-                    items.remove(currentItem);
-                }
-            }
-        }
-        if (filterItem.getSex() != null) {
-            for (Item currentItem : new ArrayList<>(items)) {
-                if (!currentItem.getSex().equals(filterItem.getSex())) {
-                    items.remove(currentItem);
-                }
-            }
-        }
-        if (filterItem.getRole() != null) {
-            for (Item currentItem : new ArrayList<>(items)) {
-                if (!currentItem.getRole().equals(filterItem.getRole())) {
-                    items.remove(currentItem);
-                }
-            }
-        }
-        saveToDB(items);
+
     }
 
     private void writingException(Exception e) {
@@ -213,5 +163,109 @@ public class DBManipulator {
         alert.setHeaderText("Ошибка");
         alert.setContentText("Произошла ошибка при записи в базу данных");
         alert.showAndWait();
+    }
+
+    private void initProcedures() {
+        try {
+            Statement statement = connection.createStatement();
+
+            String createTableProcedure = "create or replace function createDragsDB()\n" +
+                    "returns int as\n" +
+                    "$$\n" +
+                    "declare\n" +
+                    "begin\n" +
+                    "\n" +
+                    "create table Drags (id int primary key check (id>=001),\n" +
+                    "\t              name varchar(100) not null unique,\n" +
+                    "\t              price int check (price>=001), \n" +
+                    "\t              recipe boolean);\n" +
+                    "return 1;\t\t\n" +
+                    "end;\n" +
+                    "$$language plpgsql";
+
+            String dropTableProcedure = "create or replace function deleteDragsDB()\n" +
+                    "returns int as\n" +
+                    "$$\n" +
+                    "declare\n" +
+                    "begin\n" +
+                    "\n" +
+                    "drop table Drags;\n" +
+                    "return 1;\t\t\n" +
+                    "end;\n" +
+                    "$$language plpgsql\n";
+
+            String cleanTableProcedure = "create or replace function CleanDragsDB()\n" +
+                    "returns int as\n" +
+                    "$$\n" +
+                    "begin\n" +
+                    "\n" +
+                    "delete from Drags where Drags.id is not null;\n" +
+                    "\n" +
+                    "return 1;\t\t\n" +
+                    "end;\n" +
+                    "$$language plpgsql\n";
+
+            String showAllProcedure = "create function SelectDragsDB()\n" +
+                    "returns table(id int, name text, price int, recipe text)\n" +
+                    "as\n" +
+                    "$$\n" +
+                    "declare\n" +
+                    "rec record;\n" +
+                    "begin \n" +
+                    "perform Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null;\n" +
+                    "for rec in select Drags.id, Drags.name, Drags.price, Drags.recipe from Drags where Drags.id is not null;\n" +
+                    "group by Drags.id;\n" +
+                    "end; \n" +
+                    "$$ language plpgsql;";
+
+            String insertNewItemProcedure = "create or replace function AddNewDrag(name varchar(100), price int, recipe boolean)\n" +
+                    "returns int as\n" +
+                    "$$\n" +
+                    "declare\n" +
+                    "n alias for $1;\n" +
+                    "pr alias for $2;\n" +
+                    "r alias for $3;\n" +
+                    "d_id Drags.id%type;\n" +
+                    "begin\n" +
+                    "\n" +
+                    "select max(id) into d_id from Drags;\n" +
+                    "if(d_id is null) then\n" +
+                    "d_id = 0;\n" +
+                    "end if;\n" +
+                    "\n" +
+                    "insert into Drags values (d_id + 1, n, pr, r);\n" +
+                    "\n" +
+                    "return 1;\t\t\n" +
+                    "end;\n" +
+                    "$$language plpgsql";
+
+            String deleteItemProcedure = "create or replace function DeleteDragByName(name varchar(100))\n" +
+                    "returns int as\n" +
+                    "$$\n" +
+                    "declare\n" +
+                    "n alias for $1;\n" +
+                    "\n" +
+                    "begin\n" +
+                    "\n" +
+                    "delete from Drags where Drags.name = n;\n" +
+                    "\n" +
+                    "if not found then\n" +
+                    "raise exception 'Лекарства нет в базе';\n" +
+                    "end if;\n" +
+                    "\n" +
+                    "return 1;\t\t\n" +
+                    "end;\n" +
+                    "$$language plpgsql";
+
+            statement.executeUpdate(createTableProcedure);
+            statement.executeUpdate(dropTableProcedure);
+            statement.executeUpdate(showAllProcedure);
+            statement.executeUpdate(cleanTableProcedure);
+            statement.executeUpdate(insertNewItemProcedure);
+            statement.executeUpdate(deleteItemProcedure);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -13,16 +13,13 @@ public class SearchController {
     private TextField idTextField;
 
     @FXML
-    private TextField fioTextField;
+    private TextField nameTextField;
 
     @FXML
-    private TextField claimCountTextField;
+    private TextField priceTextField;
 
     @FXML
-    private TextField sexTextField;
-
-    @FXML
-    private TextField roleTextField;
+    private TextField recipeTextField;
 
     @FXML
     private Button searchButton;
@@ -34,19 +31,18 @@ public class SearchController {
             Integer id = Integer.parseInt(idTextField.getText());
             filterItem.setId(id);
         }
-        if (fioTextField.getText() != null && !fioTextField.getText().trim().isEmpty()) {
-            filterItem.setFio(fioTextField.getText());
+        if (nameTextField.getText() != null && !nameTextField.getText().trim().isEmpty()) {
+            filterItem.setName(nameTextField.getText());
         }
-        String claimCount = claimCountTextField.getText();
-        String sex = sexTextField.getText();
-        String role = roleTextField.getText();
-        if (claimCount != null && !claimCount.trim().isEmpty()) {
-            Integer claims = Integer.parseInt(claimCount);
-            filterItem.setClaimCount(claims);
+        String price = priceTextField.getText();
+        String recipe = recipeTextField.getText();
+        if (price != null && !price.trim().isEmpty()) {
+            Integer prices = Integer.parseInt(price);
+            filterItem.setPrice(prices);
         }
-        if (sex != null && !sex.trim().isEmpty()) {
-            if (sex.equals("Мужской") || sex.equals("Женский")) {
-                filterItem.setSex(sex);
+        if (recipe != null && !recipe.trim().isEmpty()) {
+            if (recipe.equals("yes") || recipe.equals("no")) {
+                filterItem.setRecipe(recipe);
             } else {
                 System.out.println("Недопустимое значение пола");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -54,33 +50,6 @@ public class SearchController {
                 alert.setHeaderText("Ошибка");
                 alert.setContentText("Недопустимое значение пола");
                 alert.showAndWait();
-            }
-        }
-        if (role != null && !role.trim().isEmpty()) {
-            switch (role) {
-                case "Девлопер":
-                case "Разработчик":
-                    filterItem.setRole("Разработчик");
-                    break;
-                case "Админ":
-                case "Администратор":
-                    filterItem.setRole("Администратор");
-                    break;
-                case "Юзер":
-                case "Пользователь":
-                    filterItem.setRole("Пользователь");
-                    break;
-                case "Аналитик":
-                    filterItem.setRole("Аналитик");
-                    break;
-                default:
-                    System.out.println("Недопустимое значение роли");
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Ошибка");
-                    alert.setHeaderText("Ошибка");
-                    alert.setContentText("Недопустимое значение роли");
-                    alert.showAndWait();
-                    break;
             }
         }
 

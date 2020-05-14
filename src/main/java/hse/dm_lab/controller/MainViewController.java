@@ -24,16 +24,16 @@ import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 public class MainViewController {
 
     @FXML
-    private TableColumn<Item, Number> claimColumn;
+    private TableColumn<Item, Number> priceColumn;
 
     @FXML
-    private TableView<Item> mainTable;
+    private TableView<Item> tableColumn;
 
     @FXML
     private Button deleteButton;
 
     @FXML
-    private TableColumn<Item, String> fioColumn;
+    private TableColumn<Item, String> nameColumn;
 
     @FXML
     private Button clearTableButton;
@@ -45,17 +45,14 @@ public class MainViewController {
     private Button insertButton;
 
     @FXML
-    private Button searchButon;
+    private Button searchButton;
 
     @FXML
-    private TableColumn<Item, String> sexColumn;
-
-    @FXML
-    private TableColumn<Item, String> roleColumn;
+    private TableColumn<Item, String> recipeColumn;
 
     @FXML
     void delete(ActionEvent event) {
-        Item item = mainTable.getSelectionModel().getSelectedItem();
+        Item item = tableColumn.getSelectionModel().getSelectedItem();
         if (item == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
@@ -63,24 +60,24 @@ public class MainViewController {
             alert.setContentText("Не выбран элемент для удаления");
             alert.showAndWait();
         } else {
-            MainApplication.manipulator.deleteItem(item.getId());
+            MainApplication.manipulator.deleteItemProcedure(item.getId());
             refreshTable();
         }
     }
 
     @FXML
-    public void editFioColumn(TableColumn.CellEditEvent editedCell) {
-        Item selectedItem = mainTable.getSelectionModel().getSelectedItem();
-        selectedItem.setFio(editedCell.getNewValue().toString());
+    public void editNameColumn(TableColumn.CellEditEvent editedCell) {
+        Item selectedItem = tableColumn.getSelectionModel().getSelectedItem();
+        selectedItem.setName(editedCell.getNewValue().toString());
         refreshTable();
     }
 
     @FXML
-    public void editSexColumn(TableColumn.CellEditEvent editedCell) {
-        String newSex = editedCell.getNewValue().toString();
-        if (newSex.equals("Мужской") || newSex.equals("Женский")) {
-            Item selectedItem = mainTable.getSelectionModel().getSelectedItem();
-            selectedItem.setSex(newSex);
+    public void editRecipeColumn(TableColumn.CellEditEvent editedCell) {
+        String newRecipe = editedCell.getNewValue().toString();
+        if (newRecipe.equals("Yes") || newRecipe.equals("No")) {
+            Item selectedItem = tableColumn.getSelectionModel().getSelectedItem();
+            selectedItem.setRecipe(newRecipe);
             refreshTable();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -92,40 +89,10 @@ public class MainViewController {
     }
 
     @FXML
-    public void editClaimCountColumn(TableColumn.CellEditEvent editedCell) {
-        Integer newClaimCount = Integer.parseInt(editedCell.getNewValue().toString());
-        Item selectedItem = mainTable.getSelectionModel().getSelectedItem();
-        selectedItem.setClaimCount(newClaimCount);
-        refreshTable();
-    }
-
-    @FXML
-    public void editRoleColumn(TableColumn.CellEditEvent editedCell) {
-        String newRole = editedCell.getNewValue().toString();
-        Item selectedItem = mainTable.getSelectionModel().getSelectedItem();
-        switch (newRole) {
-            case "Админ":
-            case "Администратор":
-                selectedItem.setRole("Администратор");
-                break;
-            case "Юзер":
-            case "Пользователь":
-                selectedItem.setRole("Пользователь");
-                break;
-            case "Девелопер":
-            case "Разработчик":
-                selectedItem.setRole("Разработчик");
-                break;
-            case "Аналитик":
-                selectedItem.setRole("Аналитик");
-                break;
-            default:
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Ошибка");
-                alert.setHeaderText("Ошибка");
-                alert.setContentText("Недопустимое значение");
-                alert.showAndWait();
-        }
+    public void editPriceColumn(TableColumn.CellEditEvent editedCell) {
+        Integer newPrice = Integer.parseInt(editedCell.getNewValue().toString());
+        Item selectedItem = tableColumn.getSelectionModel().getSelectedItem();
+        selectedItem.setPrice(newPrice);
         refreshTable();
     }
 
@@ -141,7 +108,7 @@ public class MainViewController {
         Pane pane = FXMLLoader.load(MainViewController.class.getClassLoader().getResource("fxml/InsertView.fxml"));
         Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.setTitle("Palashinovich File Database");
+        stage.setTitle("Vatletsova File Database");
         stage.showAndWait();
         refreshTable();
     }
@@ -152,37 +119,35 @@ public class MainViewController {
         Pane pane = FXMLLoader.load(MainViewController.class.getClassLoader().getResource("fxml/SearchView.fxml"));
         Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.setTitle("Palashinovich File Database");
+        stage.setTitle("Vatletsova File Database");
         stage.showAndWait();
         refreshTable();
     }
 
     @FXML
     void initialize() {
-        assert claimColumn != null : "fx:id=\"claimColumn\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert priceColumn != null : "fx:id=\"priceColumn\" was not injected: check your FXML file 'MainView.fxml'.";
         assert deleteButton != null : "fx:id=\"deleteButton\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert fioColumn != null : "fx:id=\"fioColumn\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert nameColumn != null : "fx:id=\"nameColumn\" was not injected: check your FXML file 'MainView.fxml'.";
         assert idColumn != null : "fx:id=\"idColumn\" was not injected: check your FXML file 'MainView.fxml'.";
         assert insertButton != null : "fx:id=\"insertButton\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert searchButon != null : "fx:id=\"searchButon\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert sexColumn != null : "fx:id=\"sexColumn\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert searchButton != null : "fx:id=\"searchButton\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert recipeColumn != null : "fx:id=\"recipeColumn\" was not injected: check your FXML file 'MainView.fxml'.";
         ObservableList<Item> items = FXCollections.observableArrayList(MainApplication.manipulator.showAll());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        fioColumn.setCellValueFactory(new PropertyValueFactory<>("fio"));
-        sexColumn.setCellValueFactory(new PropertyValueFactory<>("sex"));
-        claimColumn.setCellValueFactory(new PropertyValueFactory<>("claimCount"));
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        mainTable.setItems(items);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        recipeColumn.setCellValueFactory(new PropertyValueFactory<>("recipe"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tableColumn.setItems(items);
 
-        mainTable.setEditable(true);
-        fioColumn.setCellFactory(forTableColumn());
-        sexColumn.setCellFactory(forTableColumn());
-        roleColumn.setCellFactory(forTableColumn());
-        claimColumn.setCellFactory(forTableColumn(new NumberStringConverter()));
+        tableColumn.setEditable(true);
+        nameColumn.setCellFactory(forTableColumn());
+        recipeColumn.setCellFactory(forTableColumn());
+        priceColumn.setCellFactory(forTableColumn(new NumberStringConverter()));
     }
 
     private void refreshTable() {
         ObservableList<Item> items = FXCollections.observableArrayList(MainApplication.manipulator.showAll());
-        mainTable.setItems(items);
+        tableColumn.setItems(items);
     }
 }
