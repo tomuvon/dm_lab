@@ -10,7 +10,7 @@ public class Item {
 
     public Item() {}
 
-    public Item(Integer id, String fio, String sex, Integer claimCount, String role) {
+    public Item(Integer id, String name, Integer price, String recipe) {
         this.id = id;
         this.name = name;
         this.price = price;

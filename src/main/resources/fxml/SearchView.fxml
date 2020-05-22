@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="394.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hse.dm_lab.controller.SearchController">
+<?import javafx.scene.text.Text?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="297.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hse.dm_lab.controller.SearchController">
    <children>
       <GridPane alignment="CENTER" layoutX="174.0" prefHeight="394.0" prefWidth="431.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="174.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -19,22 +20,7 @@
             <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="idTextField" alignment="CENTER" promptText="id" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets top="20.0" />
-               </GridPane.margin>
-               <effect>
-                  <Lighting>
-                     <bumpInput>
-                        <Shadow color="#ffffff" />
-                     </bumpInput>
-                     <light>
-                        <javafx.scene.effect.Light.Distant color="#ffffff" />
-                     </light>
-                  </Lighting>
-               </effect>
-            </TextField>
-            <TextField fx:id="nameTextField" alignment="CENTER" promptText="name" GridPane.rowIndex="1">
+            <TextField fx:id="nameTextField" alignment="CENTER" promptText="name" GridPane.rowIndex="2">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -42,21 +28,16 @@
                   <Insets top="20.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="priceTextField" alignment="CENTER" promptText="price" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="recipeTextField" alignment="CENTER" promptText="recipe" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchItems" text="find" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchItems" text="find" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font size="17.0" />
                </font>
             </Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="find your drag" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
          </children>
          <opaqueInsets>
             <Insets />

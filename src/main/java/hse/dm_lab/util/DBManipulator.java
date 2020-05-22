@@ -4,6 +4,7 @@ import hse.dm_lab.model.Item;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -144,8 +145,17 @@ public class DBManipulator {
         }
     }
 
-    public void selectItems(Item filterItem) {
-
+    public List<Item> selectItems(String name) {
+        try {
+            CallableStatement proc = connection.prepareCall("{ call findDrag(?) }");
+            proc.setString(1, name);
+            proc.execute();
+            ResultSet results = proc.getResultSet();
+            return ItemConverter.entityFromResultSet(results);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     private void writingException(Exception e) {
@@ -236,12 +246,23 @@ public class DBManipulator {
                     "end; " +
                     "$$language plpgsql";
 
+            String findItemProcedure = "create or replace function findDrag(varchar) " +
+                    "returns SETOF Drags AS " +
+                    "$$ " +
+                    "DECLARE name int ; " +
+                    "begin " +
+                    "    return query " +
+                    "        SELECT * FROM Drags where name like '%' || $1 || '%'; " +
+                    "end; " +
+                    "$$language plpgsql";
+
             statement.executeUpdate(createTableProcedure);
             statement.executeUpdate(dropTableProcedure);
             statement.executeUpdate(showAllProcedure);
             statement.executeUpdate(cleanTableProcedure);
             statement.executeUpdate(insertNewItemProcedure);
             statement.executeUpdate(deleteItemProcedure);
+            statement.executeUpdate(findItemProcedure);
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
