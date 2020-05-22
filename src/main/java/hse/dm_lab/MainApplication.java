@@ -1,7 +1,7 @@
 package hse.dm_lab;
 
 import hse.dm_lab.model.Item;
-import hse.dm_lab.util.DBManipulator;
+import hse.dm_lab.util.DBAccess;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MainApplication extends Application {
 
-    public static DBManipulator manipulator = new DBManipulator();
+    public static DBAccess manipulator = new DBAccess();
     private static List<Item> tempList = new ArrayList<>();
 
     public static void main(String[] args) {

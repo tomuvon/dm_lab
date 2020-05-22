@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class DBManipulator {
+public class DBAccess {
     private final String URl = "jdbc:postgresql://localhost:5347/lab5";
     private final String id = "postgres";
     private final String password = "603041";
     private Connection connection;
 
-    public DBManipulator() {
+    public DBAccess() {
         try {
             String JDBC_DRIVER = "org.postgresql.Driver";
             Class.forName(JDBC_DRIVER);
